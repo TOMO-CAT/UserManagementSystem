@@ -7,7 +7,8 @@ GoVersion := $(shell go version | cut -d " " -f3- | tr " " "_")
 LastCommitTime := $(shell git show -s --format=%ci | tr " " "_")
 LastCommitAuthor := $(shell git log -1 --pretty=format:'%ae')
 
-BUILD_INFO = -X github.com/TOMO-CAT/UserManagementSystem/pkg/util/app.Commit=${Commit} \
+BUILD_INFO = -X github.com/TOMO-CAT/UserManagementSystem/pkg/util/app.Version=${Version} \
+ 	-X github.com/TOMO-CAT/UserManagementSystem/pkg/util/app.Commit=${Commit} \
 	-X github.com/TOMO-CAT/UserManagementSystem/pkg/util/app.Branch=${Branch} \
 	-X github.com/TOMO-CAT/UserManagementSystem/pkg/util/app.BuildTime=${BuildTime} \
 	-X github.com/TOMO-CAT/UserManagementSystem/pkg/util/app.Builder=${Builder} \
@@ -49,3 +50,7 @@ info:
 .PHONY: restart
 restart:
 	@./bin/ums_server --control restart
+
+.PHONY: run
+run:
+	@./bin/ums_server
