@@ -72,4 +72,6 @@ protoc-gen-go v1.31.0
 
 ```bash
 go mod tidy
+go mod vendor
+
 ```

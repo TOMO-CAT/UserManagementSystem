@@ -17,7 +17,8 @@
         "protoc",
         "protoimpl",
         "takeup",
-        "TOMO"
+        "TOMO",
+        "urfave"
     ],
     "cSpell.enableFiletypes": [
         "!jsonc",

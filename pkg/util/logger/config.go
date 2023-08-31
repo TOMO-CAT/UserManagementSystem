@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/proto/config"
+	"github.com/TOMO-CAT/UserManagementSystem/proto/config"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -26,6 +26,12 @@ func InitLogger(loggerConfPath string) (err error) {
 	if err = protojson.Unmarshal(confContent, &confPbMsg); err != nil {
 		panic(err)
 	}
+
+	// 如果是 DAEMON 进程则关闭控制台输出
+	if _, isDaemon := os.LookupEnv("DAEMON"); isDaemon {
+		*confPbMsg.ConsoleWriterConfig.Enable = false
+	}
+
 	return initLoggerWithConf(&confPbMsg)
 }
 

@@ -31,7 +31,7 @@ export GOPROXY=https://proxy.golang.com.cn,direct
 ## 初始化仓库
 
 ```bash
-go mod init github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem
+go mod init github.com/TOMO-CAT/UserManagementSystem
 ```
 
 ## 下载依赖

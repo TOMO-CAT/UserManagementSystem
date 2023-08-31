@@ -5,11 +5,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/logger"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 )
 
 const (
-	stdioLogPath = "./log/stdio.log"
+	stdioLogPath = "./logs/stdio.log"
 )
 
 var stdioLogFileINode uint64

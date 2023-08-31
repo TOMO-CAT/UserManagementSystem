@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	_ "github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/proto/config"
+	_ "github.com/TOMO-CAT/UserManagementSystem/proto/config"
 )
 
 func main() {

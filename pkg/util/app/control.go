@@ -7,27 +7,29 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/logger"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 )
 
 func controlStartHandler(pidFileDir string, serviceName string) {
+	// 没有 DAEMON 环境变量的是前台进程, 负责启动子进程
+	// 有 DAEMON 变量的是启动的子进程, 这里会直接退出
 	if _, isDaemon := os.LookupEnv("DAEMON"); !isDaemon {
 		if isPidFileExist(pidFileDir, serviceName) {
 			fmt.Printf("[Error] please stop the DAEMON process before start it again, pid file [%s]\n",
 				path.Join(pidFileDir, fmt.Sprintf(PID_FILE_FORMAT, serviceName)))
 			os.Exit(1)
 		}
-	}
 
-	childPid, _ := syscall.ForkExec(os.Args[0], os.Args, &syscall.ProcAttr{
-		Env: append(os.Environ(), []string{"DAEMON=true"}...),
-		Sys: &syscall.SysProcAttr{
-			Setsid: true,
-		},
-		Files: []uintptr{0, 1, 2},
-	})
-	fmt.Printf("[Info] start service [%s] successfully! service with pid [%d] will run as daemon\n", serviceName, childPid)
-	os.Exit(0)
+		childPid, _ := syscall.ForkExec(os.Args[0], os.Args, &syscall.ProcAttr{
+			Env: append(os.Environ(), []string{"DAEMON=true"}...),
+			Sys: &syscall.SysProcAttr{
+				Setsid: true,
+			},
+			Files: []uintptr{0, 1, 2},
+		})
+		fmt.Printf("[Info] start service [%s] successfully! service with pid [%d] will run as daemon\n", serviceName, childPid)
+		os.Exit(0)
+	}
 }
 
 func controlStopHandler(pidFileDir string, serviceName string) {

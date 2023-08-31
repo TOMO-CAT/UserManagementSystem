@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/monitor"
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/server/common"
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util"
-	proto "github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/proto/service"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/monitor"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/server/common"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util"
+	proto "github.com/TOMO-CAT/UserManagementSystem/proto/service"
 )
 
 func (s *server) Echo(ctx context.Context, req *proto.EchoRequest) (res *proto.EchoResponse, err error) {

@@ -6,7 +6,7 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/logger"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 )
 
 func GetSrcMethod(skip int) string {

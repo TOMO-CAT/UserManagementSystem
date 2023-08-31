@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util"
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/logger"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 )
 
 func RecordRequestInfo(ctx context.Context, req interface{}) {

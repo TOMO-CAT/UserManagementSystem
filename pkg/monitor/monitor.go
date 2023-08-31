@@ -3,7 +3,7 @@ package monitor
 import (
 	"time"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

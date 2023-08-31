@@ -5,25 +5,27 @@ import (
 )
 
 var (
-	Version   string
-	Commit    string
-	Branch    string
-	BuildTime string
-	Builder   string
-	GoVersion string
-	ExtraInfo string
+	Version          string
+	Commit           string
+	Branch           string
+	BuildTime        string
+	Builder          string
+	GoVersion        string
+	LastCommitTime   string
+	LastCommitAuthor string
 )
 
-var _buildInfoTemplate = `
-Version:     %s
-Commit:      %s
-Branch:      %s
-BuildTime:   %s
-Builder:     %s
-GoVersion:   %s
-ExtraInfo:   %s
+var buildInfoTemplate = `
+Version:           %s
+Commit:            %s
+Branch:            %s
+BuildTime:         %s
+Builder:           %s
+GoVersion:         %s
+LastCommitTime:    %s
+LastCommitAuthor:  %s
 `
 
 func printBuildInfo() {
-	fmt.Printf(_buildInfoTemplate, Version, Commit, Branch, BuildTime, Builder, GoVersion, ExtraInfo)
+	fmt.Printf(buildInfoTemplate, Version, Commit, Branch, BuildTime, Builder, GoVersion, LastCommitTime, LastCommitAuthor)
 }

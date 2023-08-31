@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/httphandler"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/httphandler"
 )
 
 func Start(ctx context.Context, port int) error {

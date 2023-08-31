@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/server/grpcserver"
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/server/httpserver"
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/app"
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/logger"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/server/grpcserver"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/server/httpserver"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/app"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 	"github.com/urfave/cli/v2"
 )
 
@@ -19,7 +19,7 @@ const (
 func main() {
 	umsApp := app.App{
 		Name:    "ums",
-		Usage:   "user managerment system",
+		Usage:   "user management system",
 		RunFunc: run,
 	}
 	umsApp.StartService(

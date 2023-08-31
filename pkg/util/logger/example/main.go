@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util"
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/logger"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 )
 
 // 运行: go run pkg/util/logger/example/main.go

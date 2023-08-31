@@ -29,7 +29,7 @@ lint:
 
 需要自己下载 protolint：
 
-> https://github.com/yoheimuta/protolint/releases
+> <https://github.com/yoheimuta/protolint/releases>
 
 ```bash
 $ cd /tmp
@@ -42,4 +42,11 @@ protoc-gen-protolint
 
 $ sudo mv ./protolint /usr/bin/
 $ sudo mv ./protoc-gen-protolint /usr/bin/
+```
+
+## 安装 proto 二进制工具
+
+```bash
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 ```

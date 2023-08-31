@@ -1,4 +1,4 @@
-module github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem
+module github.com/TOMO-CAT/UserManagementSystem
 
 go 1.18
 

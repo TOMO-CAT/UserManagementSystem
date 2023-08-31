@@ -12,8 +12,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util"
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/logger"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 	cli "github.com/urfave/cli/v2"
 )
 

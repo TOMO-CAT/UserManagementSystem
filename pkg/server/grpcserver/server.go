@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/pkg/util/logger"
-	proto "github.com/TOMO-CAT/ToyBox/GolangProjects/UserManagerSystem/proto/service"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
+	proto "github.com/TOMO-CAT/UserManagementSystem/proto/service"
 	"google.golang.org/grpc"
 )
 
