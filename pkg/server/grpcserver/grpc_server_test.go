@@ -7,5 +7,4 @@ func init4test() {
 }
 
 func TestEcho(t *testing.T) {
-
 }

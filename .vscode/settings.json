@@ -16,6 +16,7 @@
         "Idxs",
         "protoc",
         "protoimpl",
+        "stretchr",
         "takeup",
         "TOMO",
         "urfave"
