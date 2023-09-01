@@ -75,7 +75,7 @@ func NewLogger() *Logger {
 	l.recordChan = make(chan *Record, 1024)
 	l.c = make(chan bool, 1)
 	l.level = LogLevelDebug
-	l.layout = "2006-01-02T15:04:05.000+0800"
+	l.layout = "2006-01-02 15:04:05.000+0800"
 
 	go boostrapLogWriter(l)
 

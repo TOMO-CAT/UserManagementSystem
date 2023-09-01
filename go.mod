@@ -3,6 +3,7 @@ module github.com/TOMO-CAT/UserManagementSystem
 go 1.18
 
 require (
+	github.com/BurntSushi/toml v1.3.2
 	github.com/google/uuid v1.3.0
 	github.com/prometheus/client_golang v1.16.0
 	github.com/stretchr/testify v1.8.0

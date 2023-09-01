@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/config"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/server/grpcserver"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/server/httpserver"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/app"
@@ -13,7 +14,8 @@ import (
 )
 
 const (
-	kDefaultLoggerPath = "conf/logger.json"
+	kDefaultLoggerPath  = "conf/logger.json"
+	kDefaultUmsConfPath = "conf/config-dev.toml"
 )
 
 func main() {
@@ -36,12 +38,6 @@ func main() {
 }
 
 func run(flags map[string]interface{}, ctx context.Context, errChan chan error, appWg *sync.WaitGroup) error {
-	// parse config
-	// if err := config.ParseConfig(configPath); err != nil {
-	// 	logger.Error("init config fail with err:%v", err)
-	// 	return err
-	// }
-
 	// 初始化日志
 	var loggerConfPath string = kDefaultLoggerPath
 	if val, exists := flags["log-conf"]; exists {
@@ -52,13 +48,22 @@ func run(flags map[string]interface{}, ctx context.Context, errChan chan error, 
 		return fmt.Errorf("init logger [%s] fail with err [%v]", loggerConfPath, err)
 	}
 
+	// 初始化配置文件
+	var umsConfPath string = kDefaultUmsConfPath
+	if val, exists := flags["conf"]; exists {
+		umsConfPath = fmt.Sprintf("%v", val)
+	}
+	if err := config.ParseConfig(umsConfPath); err != nil {
+		logger.Error("parse ums config [%s] fail with err [%v]", umsConfPath, err)
+		return err
+	}
+
 	// metric && pprof http service
-	httpPort := 3366
 	appWg.Add(1)
 	go func() {
 		defer appWg.Done()
-		logger.Info("start metric && pprof server with port [%d]", httpPort)
-		if err := httpserver.Start(ctx, httpPort); err != nil {
+		logger.Info("start metric && pprof server with port [%d]", config.GlobalUmsConfig.HttpServer.Port)
+		if err := httpserver.Start(ctx, config.GlobalUmsConfig.HttpServer.Port); err != nil {
 			errChan <- fmt.Errorf("http server closed with err [%v]", err)
 		} else {
 			logger.Info("http server shutdown")
@@ -66,7 +71,6 @@ func run(flags map[string]interface{}, ctx context.Context, errChan chan error, 
 	}()
 
 	// 启动 grpc 服务
-	grpcPort := 4477
-	logger.Info("start grpc server with port [%d]", grpcPort)
-	return grpcserver.NewServer().Start(ctx, grpcPort)
+	logger.Info("start grpc server with port [%d]", config.GlobalUmsConfig.GrpcServer.Port)
+	return grpcserver.NewServer().Start(ctx, config.GlobalUmsConfig.GrpcServer.Port)
 }

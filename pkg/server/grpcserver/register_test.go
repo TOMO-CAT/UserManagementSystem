@@ -28,3 +28,19 @@ func TestCheckUsername(t *testing.T) {
 		ass.Equal(c.expected, checkUserName(c.userName))
 	}
 }
+
+func TestCheckPassword(t *testing.T) {
+	ass := assert.New(t)
+
+	var cases = []struct {
+		password string
+		expected bool
+	}{
+		{"password", true},
+		{"k", false},
+	}
+
+	for _, c := range cases {
+		ass.Equal(c.expected, checkPassword(c.password))
+	}
+}

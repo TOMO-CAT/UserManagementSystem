@@ -1,5 +1,0 @@
-syntax = "proto2";
-
-package ums.config.proto;
-
-option go_package = "proto/config";

@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"strings"
 )
 
 var (
@@ -27,5 +28,8 @@ LastCommitAuthor:  %s
 `
 
 func printBuildInfo() {
-	fmt.Printf(buildInfoTemplate, Version, Commit, Branch, BuildTime, Builder, GoVersion, LastCommitTime, LastCommitAuthor)
+	fmt.Println("-------------------- BUILD INFO --------------------")
+	fmt.Printf(strings.TrimPrefix(buildInfoTemplate, "\n"),
+		Version, Commit, Branch, BuildTime, Builder, GoVersion, LastCommitTime, LastCommitAuthor)
+	fmt.Println("----------------------------------------------------")
 }

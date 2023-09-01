@@ -1,0 +1,10 @@
+env = "dev"
+
+[mysql]
+port = 3306
+
+[grpc-server]
+port = 9944
+
+[http-server]
+port = 9955
