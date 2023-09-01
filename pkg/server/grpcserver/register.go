@@ -15,6 +15,15 @@ func (s *server) Register(ctx context.Context, req *proto.RegisterRequest) (res 
 		ErrorMsg:  common.ErrorMsgOk,
 	}
 
+	if !checkUserName(req.GetUserName()) {
+		wrapResp(res, false, common.ErrorCodeRegisterInvalidUserName, common.ErrorMsgRegisterInvalidUserName)
+		return
+	}
+	if !checkPassword(req.GetUserPassword()) {
+		wrapResp(res, false, common.ErrorCodeRegisterInvalidPassword, common.ErrorMsgRegisterInvalidPassword)
+		return
+	}
+
 	return
 }
 
@@ -29,5 +38,7 @@ func checkPassword(password string) bool {
 }
 
 func wrapResp(res *proto.RegisterResponse, isSuccess bool, errno int, errMsg string) {
-
+	res.IsSuccess = isSuccess
+	res.ErrorCode = int32(errno)
+	res.ErrorMsg = errMsg
 }
