@@ -5,9 +5,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"syscall"
 
 	"github.com/TOMO-CAT/UserManagementSystem/proto/config"
 	"google.golang.org/protobuf/encoding/protojson"
+)
+
+const (
+	kStdioLogFile = "stdout.log"
 )
 
 // InitLogger 根据配置文件初始化日志模块
@@ -27,11 +33,6 @@ func InitLogger(loggerConfPath string) (err error) {
 		panic(err)
 	}
 
-	// 如果是 DAEMON 进程则关闭控制台输出
-	if _, isDaemon := os.LookupEnv("DAEMON"); isDaemon {
-		*confPbMsg.ConsoleWriterConfig.Enable = false
-	}
-
 	return initLoggerWithConf(&confPbMsg)
 }
 
@@ -43,6 +44,21 @@ func InitLoggerDefault() (err error) {
 	}
 
 	return initLoggerWithConf(&confPbMsg)
+}
+
+// RedirectStdoutAndStderr 重定向标准输出和标准错误
+func RedirectStdoutAndStderr(filePath string) (err error) {
+	var file *os.File
+	file, err = os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0644)
+	if err != nil {
+		fmt.Printf("[Error]: create [%s] file fail with err [%v]\n", filePath, err)
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	syscall.Dup2(int(file.Fd()), 1)
+	syscall.Dup2(int(file.Fd()), 2)
+	return
 }
 
 func initLoggerWithConf(conf *config.LoggerConfig) (err error) {
@@ -70,6 +86,18 @@ func initLoggerWithConf(conf *config.LoggerConfig) (err error) {
 			w.SetRetainHours(int(conf.FileWriterConfig.GetRetainHours()))
 			Register(w)
 		}
+	}
+
+	// 如果是 DAEMON 进程则关闭控制台输出并重定向 stdout 和 stderr
+	if _, isDaemon := os.LookupEnv("DAEMON"); isDaemon {
+		*conf.ConsoleWriterConfig.Enable = false
+
+		// stdout.log 文件存放在 info 日志的文件夹中, 前面 Register(w) 已经保证了文件夹存在
+		logFileDir := filepath.Dir(conf.FileWriterConfig.GetInfoLogPath())
+		stdoutLogFilePath := filepath.Join(logFileDir, kStdioLogFile)
+		fmt.Printf("[Info] stdout && stderr will redirect to file [%s]\n", stdoutLogFilePath)
+
+		RedirectStdoutAndStderr(stdoutLogFilePath)
 	}
 
 	// 控制台日志

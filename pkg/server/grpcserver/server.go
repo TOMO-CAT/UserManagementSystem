@@ -26,6 +26,7 @@ func (s *server) Start(ctx context.Context, port int, grpcOpts ...grpc.ServerOpt
 		logger.Fatal("listen port [%d] fail with err [%v]", port, err)
 		return err
 	}
+	defer listen.Close()
 
 	// 接受到上游 cancel 信号时尝试优雅退出
 	go func() {
@@ -33,7 +34,6 @@ func (s *server) Start(ctx context.Context, port int, grpcOpts ...grpc.ServerOpt
 		logger.Info("try to stop grpc server gracefully...")
 		svc.GracefulStop()
 		logger.Info("stop grpc server gracefully done!")
-		_ = listen.Close()
 	}()
 
 	// 打印 grpc server 是否正常退出

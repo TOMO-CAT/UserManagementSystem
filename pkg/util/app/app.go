@@ -12,7 +12,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/TOMO-CAT/UserManagementSystem/pkg/util"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 	cli "github.com/urfave/cli/v2"
 )
@@ -119,18 +118,13 @@ func (a *App) runFuncWrapper() cli.ActionFunc {
 		// 处理 pid 文件
 		if _, isDaemon := os.LookupEnv("DAEMON"); isDaemon {
 			if controlCmd == "start" || controlCmd == "restart" {
-				logger.Info("daemon process [%d] start running in the background", os.Getpid())
+				logger.Info("DAEMON process [%d] start running in the background", os.Getpid())
 				if err := writeServicePid(pidFileDir, a.Name); err != nil {
 					logger.Error("write pid to file fail with err [%v]", err)
 					fmt.Printf("[Error] write pid to file fail with err [%v]\n", err)
 					syscall.Exit(1)
 				}
 				defer deletePidFile(pidFileDir, a.Name)
-
-				// 以后台方式运行的时候重定向 stdout 和 stderr 到日志中, 避免丢失控制台日志
-				if err := util.RedirectStdioAndStderr(); err != nil {
-					logger.Error("redirect stdout && stderr fail with err:%v", err)
-				}
 			}
 		}
 
@@ -156,7 +150,11 @@ func (a *App) runFuncWrapper() cli.ActionFunc {
 			logger.Info("app [%s] start", a.Name)
 			err := a.RunFunc(flagMap, ctx, a.errChan, &a.wg)
 			a.errChan <- err
-			logger.Info("app [%s] quit with err: %v", a.Name, err)
+			if err != nil {
+				logger.Error("app [%s] quit with err: %v", a.Name, err)
+			} else {
+				logger.Info("app [%s] quit successfully!", a.Name)
+			}
 		}()
 
 		// 优雅退出
