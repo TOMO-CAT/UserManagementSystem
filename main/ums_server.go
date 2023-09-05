@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/config"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/db"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/server/grpcserver"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/server/httpserver"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/app"
@@ -57,6 +58,9 @@ func run(flags map[string]interface{}, ctx context.Context, errChan chan error, 
 		logger.Error("parse ums config [%s] fail with err [%v]", umsConfPath, err)
 		return err
 	}
+
+	// 初始化 redis 客户端
+	db.InitRedisClient()
 
 	// metric && pprof http service
 	appWg.Add(1)

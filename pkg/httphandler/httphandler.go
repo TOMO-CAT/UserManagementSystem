@@ -7,9 +7,10 @@ import (
 func NewCommonMux() *http.ServeMux {
 	m := http.NewServeMux()
 
-	muxMetrics(m) // 监控打点
-	muxPing(m)    // 打印服务信息
-	muxPProf(m)   // 性能分析
+	muxMetrics(m)       // 监控打点
+	muxPing(m)          // 打印服务信息
+	muxPProf(m)         // 性能分析
+	muxRefreshConfig(m) // 动态配置更新
 
 	return m
 }

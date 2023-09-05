@@ -62,7 +62,7 @@ func RedirectStdoutAndStderr(filePath string) (err error) {
 }
 
 func initLoggerWithConf(conf *config.LoggerConfig) (err error) {
-	if conf.FileWriterConfig != nil {
+	if conf.GetFileWriterConfig().GetEnable() {
 		// INFO 日志
 		if len(conf.FileWriterConfig.GetInfoLogPath()) > 0 {
 			w := NewFileWriter()
@@ -101,7 +101,7 @@ func initLoggerWithConf(conf *config.LoggerConfig) (err error) {
 	}
 
 	// 控制台日志
-	if conf.ConsoleWriterConfig.GetEnable() {
+	if conf.GetConsoleWriterConfig().GetEnable() {
 		w := NewConsoleWriter()
 		w.SetColor(conf.ConsoleWriterConfig.GetEnableColor())
 		if consoleLogLevel, ok := string2logLevel[conf.ConsoleWriterConfig.GetLogLevel().String()]; !ok {

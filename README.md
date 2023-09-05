@@ -15,6 +15,7 @@
 * 性能测试写法
 * 压测工具
 * docker 镜像使用方法
+* 基于动态配置更新的降级方案
 
 ## 搭建 docker 环境
 
@@ -66,7 +67,63 @@ protoc-gen-go v1.31.0
 
 ### 2. redis
 
+> docker 中安装 systemctl 命令比较麻烦，因为 docker 的设计理念是一个容器只运行一个服务，我们暂时在宿主机中安装 redis 和 mysql。
+
+```bash
+sudo apt install redis-server
+
+sudo systemctl start redis-server
+
+sudo systemctl status redis-server
+```
+
 ### 3. MySql
+
+```bash
+# 安装
+sudo apt install mysql-server
+
+# 启动 MySql 服务
+sudo systemctl start mysql
+
+# 查看启动状态
+sudo systemctl status mysql
+
+# 查看默认账户密码
+cd /etc/mysql
+sudo cat debian.cnf
+
+# 使用默认账户登陆 mysql
+# 密码: W80yHnUinnJBHTlQ
+mysql -u debian-sys-maint -p
+
+
+# 修改 root 密码 (MySQL 8.0 版本以上): https://techvblogs.com/blog/how-to-reset-mysql-root-password-ubuntu
+# 1. 停止服务
+sudo systemctl stop mysql.service
+# 2. 跳过权限验证
+sudo systemctl set-environment MYSQLD_OPTS="--skip-networking --skip-grant-tables"
+# 3. 重启服务
+sudo systemctl start mysql.service
+# 4. 登陆
+sudo mysql -u root
+# 5. 刷新权限表
+mysql> flush privileges;
+# 6. 修改密码
+mysql> use mysql;
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '12345678';
+# 7. 退出
+mysql> quit;
+# 8. 重启服务
+sudo killall -u mysql
+sudo systemctl restart mysql.service
+
+# 登陆 root 账号 (必须带上 sudo)
+sudo mysql -u root -p
+
+# 创建数据库
+mysql> CREATE DATABASE db_ums;
+```
 
 ## 编译
 

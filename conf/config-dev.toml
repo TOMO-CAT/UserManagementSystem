@@ -1,7 +1,20 @@
 env = "dev"
 
 [mysql]
+ip = "127.0.0.1"
 port = 3306
+user = "root"
+password = "12345"
+database = "ums"
+max-open-conns = 50
+max-idle-conns = 20
+
+[redis]
+ip = "127.0.0.1"
+port = 6379
+max-idle = 20
+max-active = 50
+idle-timeout-seconds = 240
 
 [grpc-server]
 port = 9944

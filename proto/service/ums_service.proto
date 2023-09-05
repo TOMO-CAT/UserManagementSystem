@@ -17,9 +17,9 @@ service UmsService {
   rpc Logout(LogoutRequest) returns (LogoutResponse) {}
 
   // 获取用户信息
-  rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse);
+  rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
   // 更新用户信息
-  rpc UpdateUserInfo (UpdateUserInfoRequest) returns (UpdateUserInfoResponse);
+  rpc UpdateUserInfo(UpdateUserInfoRequest) returns (UpdateUserInfoResponse);
 }
 
 message EchoRequest {
@@ -71,7 +71,6 @@ message LogoutResponse {
   string error_msg = 3;
 }
 
-
 message GetUserInfoRequest {
   uint64 user_id = 1;
   string sessin_id = 2;
@@ -81,7 +80,7 @@ message UserInfo {
   uint64 user_id = 1;
   string user_name = 2;
   string nickname = 3;
-  string avatar = 4; // 头像
+  string avatar_url = 4;     // 头像
   string user_signature = 5; // 个性签名
 }
 
@@ -100,7 +99,7 @@ message UpdateUserInfoRequest {
   // 通过掩码设置需要更新的字段, 每个字段用一个二进制位表示
   // 0x01 - 0b00001: 非法, 不允许设置 user_id
   // 0x02 - 0b00010: 设置 user_name
-  // 0x06 - 0b00110: 设置 user_name 和 avatar
+  // 0x06 - 0b00110: 设置 user_name 和 avatar_url
   uint32 bitmask = 3;
   UserInfo user_info = 4;
 }
