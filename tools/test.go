@@ -42,6 +42,9 @@ func query2InterfaceMap(sqlStr string) (res []map[string]interface{}, err error)
 }
 
 func main() {
+	logger.InitLoggerDefault()
+	defer logger.Close()
+
 	// var err error
 
 	// // 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
@@ -60,6 +63,12 @@ func main() {
 		panic(err)
 	}
 	defer db.Close()
+
+	// TODO(cat): 必须通过 ping 测试是否连接上数据库
+	// https://github.com/jhouyang/usermm/blob/master/initdb.go
+	if err := db.Ping(); err != nil {
+		logger.Fatal("ping mysql db fail with err [%v]", err)
+	}
 
 	if db == nil {
 		panic("db is nil")

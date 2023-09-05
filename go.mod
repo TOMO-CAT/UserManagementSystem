@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/BurntSushi/toml v1.3.2
 	github.com/didi/gendry v1.8.1
+	github.com/go-sql-driver/mysql v1.7.1
 	github.com/gomodule/redigo v1.8.9
 	github.com/google/uuid v1.3.1
 	github.com/prometheus/client_golang v1.16.0
@@ -21,7 +22,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
