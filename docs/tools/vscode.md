@@ -7,3 +7,4 @@
 * protolint：proto 代码规范
 * Code Spell Checker：提供拼写检查
 * SQL Formatter：SQL 格式化
+* MySQL 插件：直接查看 MySQL 数据库

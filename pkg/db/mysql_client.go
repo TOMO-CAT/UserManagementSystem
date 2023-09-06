@@ -42,10 +42,12 @@ func (c *mysqlClient) Close() {
 }
 
 // Query2InterfaceMap
-// TODO(cat): 让 Query2InterfaceMap 入参支持 Query2InterfaceMap("SELECT user_name from USER where id = ?", 100); 的 ? 写法
-func (c *mysqlClient) Query2InterfaceMap(sqlStr string) (res []map[string]interface{}, err error) {
+func (c *mysqlClient) Query2InterfaceMap(sqlStr string, values ...interface{}) (res []map[string]interface{}, err error) {
 	var rows *sql.Rows
-	rows, err = c.Raw(sqlStr).Rows()
+
+	// c.Raw 方法和 c.Exec 方法区别在于 Exec 方法不会返回错误
+	// 如果不关心输出则使用 c.Exec; 否则使用 Raw
+	rows, err = c.Raw(sqlStr, values...).Rows()
 	defer rows.Close()
 
 	if err != nil {
@@ -63,9 +65,9 @@ func (c *mysqlClient) Query2InterfaceMap(sqlStr string) (res []map[string]interf
 	return
 }
 
-func (c *mysqlClient) Query2StringMap(sqlStr string) (res []map[string]string, err error) {
+func (c *mysqlClient) Query2StringMap(sqlStr string, values ...interface{}) (res []map[string]string, err error) {
 	var interfaceRes []map[string]interface{}
-	interfaceRes, err = c.Query2InterfaceMap(sqlStr)
+	interfaceRes, err = c.Query2InterfaceMap(sqlStr, values...)
 	if err != nil {
 		return
 	}
@@ -96,8 +98,9 @@ func (c *mysqlClient) Query2StringMap(sqlStr string) (res []map[string]string, e
 }
 
 // Query2StructArray 查询 sql, 并将结果映射到 resPtr 指针指向的结构体中
-// @param sqlStr 待查询的 sql
 // @param resPtr目标结构体指针的数组 &[]struct
+// @param sqlStr 待查询的 sql
+// @param values sql 参数
 // @return err
 //
 // eg:
@@ -107,11 +110,11 @@ func (c *mysqlClient) Query2StringMap(sqlStr string) (res []map[string]string, e
 // }
 // sqlStr := "SELECT name, score FROM student"
 // err = PtrMySqlClient.Query2StructArray(sql, &StudentInfo)
-func (c *mysqlClient) Query2StructArray(sqlStr string, resPtr interface{}) (err error) {
+func (c *mysqlClient) Query2StructArray(resPtr interface{}, sqlStr string, values ...interface{}) (err error) {
 	var (
 		rows *sql.Rows
 	)
-	rows, err = c.Raw(sqlStr).Rows()
+	rows, err = c.Raw(sqlStr, values...).Rows()
 	defer rows.Close()
 
 	if err != nil {
@@ -140,7 +143,7 @@ func (c *mysqlClient) Query2StructArray(sqlStr string, resPtr interface{}) (err 
 //
 // 写入文件的内容:
 // INSERT INFO `student` (`name`, `score`) VALUES ("cat", 78), ("dog", 21);
-func (c *mysqlClient) Query2InsertStatement(tableName, sqlStr, outputFile string) (err error) {
+func (c *mysqlClient) Query2InsertStatement(tableName, outputFile string, sqlStr string, values ...interface{}) (err error) {
 	// 判断文件是否存在, 不存在时创建
 	_, err = os.Stat(outputFile)
 	if os.IsNotExist(err) {
@@ -152,7 +155,7 @@ func (c *mysqlClient) Query2InsertStatement(tableName, sqlStr, outputFile string
 	}
 
 	var queryRes []map[string]string
-	if queryRes, err = c.Query2StringMap(sqlStr); err != nil {
+	if queryRes, err = c.Query2StringMap(sqlStr, values...); err != nil {
 		return
 	}
 	if len(queryRes) <= 0 {
