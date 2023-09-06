@@ -5,6 +5,7 @@ import (
 
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/config"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/db"
+	"github.com/TOMO-CAT/UserManagementSystem/pkg/db/mysqltable"
 	"github.com/TOMO-CAT/UserManagementSystem/pkg/util/logger"
 )
 
@@ -34,6 +35,13 @@ func main() {
 
 	// 创建数据库
 	createDatabase(kDatabaseName)
+
+	// 初始化 Mysql Client
+	db.PtrMysqlClient.Init()
+	defer db.PtrMysqlClient.Close()
+
+	// 创建表
+	createTable()
 }
 
 func createDatabase(dbName string) {
@@ -68,6 +76,31 @@ func createDatabase(dbName string) {
 	}
 
 	logger.Info("create database [%s] successfully", dbName)
+}
+
+func createTable() {
+	curDbName := db.PtrMysqlClient.Migrator().CurrentDatabase()
+	if curDbName != kDatabaseName {
+		logger.Fatal("wrong database [%s]", curDbName)
+	}
+
+	table_creator := func(tableName string, dst interface{}) {
+		if db.PtrMysqlClient.Migrator().HasTable(tableName) {
+			logger.Info("table [%s] is already exist!", tableName)
+			return
+		}
+		logger.Info("table [%s] not exist, create it now!", tableName)
+		if err := db.PtrMysqlClient.Migrator().CreateTable(dst); err != nil {
+			logger.Fatal("create table [%s] fail with err [%v]", tableName, err)
+		}
+		logger.Info("create table [%s] successfully!", tableName)
+	}
+
+	// 创建 UserInfo 表
+	table_creator(mysqltable.TableNameUserInfo, &mysqltable.UserInfo{})
+
+	// 创建 UserAuth 表
+	table_creator(mysqltable.TableNameUserAuth, &mysqltable.UserAuth{})
 }
 
 func isDatabaseExist(dbName string) bool {

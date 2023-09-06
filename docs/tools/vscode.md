@@ -6,3 +6,4 @@
 * vscode-proto3：proto 代码格式化
 * protolint：proto 代码规范
 * Code Spell Checker：提供拼写检查
+* SQL Formatter：SQL 格式化
