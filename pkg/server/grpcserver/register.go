@@ -15,6 +15,7 @@ func (s *server) Register(ctx context.Context, req *proto.RegisterRequest) (res 
 		ErrorMsg:  common.ErrorMsgOk,
 	}
 
+	// 参数校验
 	if !checkUserName(req.GetUserName()) {
 		wrapResp(res, false, common.ErrorCodeRegisterInvalidUserName, common.ErrorMsgRegisterInvalidUserName)
 		return
@@ -23,6 +24,8 @@ func (s *server) Register(ctx context.Context, req *proto.RegisterRequest) (res 
 		wrapResp(res, false, common.ErrorCodeRegisterInvalidPassword, common.ErrorMsgRegisterInvalidPassword)
 		return
 	}
+
+	// ·
 
 	return
 }

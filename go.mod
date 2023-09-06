@@ -9,6 +9,7 @@ require (
 	github.com/gomodule/redigo v1.8.9
 	github.com/google/uuid v1.3.1
 	github.com/prometheus/client_golang v1.16.0
+	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.8.4
 	github.com/urfave/cli/v2 v2.25.7
 	google.golang.org/grpc v1.57.0
