@@ -43,6 +43,8 @@ func LockRegister(ctx context.Context, userName string, token string) (isLockSuc
 
 // IsUserRegistered 判断用户是否已经注册了
 func IsUserRegistered(ctx context.Context) (isRegister bool, err error) {
+	// 先查内存锁避免减少对数据库的查询压力
+
 	// 先查 redis 缓存
 
 	return

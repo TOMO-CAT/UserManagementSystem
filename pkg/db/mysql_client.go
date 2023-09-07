@@ -137,7 +137,8 @@ func (c *mysqlClient) Query2StructArray(resPtr interface{}, sqlStr string, value
 // @return err
 //
 // eg:
-// @param sqlStr SELECT name, score FROM student WHERE id < 100;
+// @param sqlStr SELECT name, score FROM student WHERE id < ?;
+// @param values 100
 // @param tableName student
 // @param outputFile "./output.txt"
 //
