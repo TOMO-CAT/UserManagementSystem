@@ -92,10 +92,12 @@ func initLoggerWithConf(conf *config.LoggerConfig) (err error) {
 	if _, isDaemon := os.LookupEnv("DAEMON"); isDaemon {
 		*conf.ConsoleWriterConfig.Enable = false
 
-		// stdout.log 文件存放在 info 日志的文件夹中, 前面 Register(w) 已经保证了文件夹存在
+		//stdout.log 文件存放在 info 日志的文件夹中，前面 Register (w) 已经保证了文件夹存在
 		logFileDir := filepath.Dir(conf.FileWriterConfig.GetInfoLogPath())
 		stdoutLogFilePath := filepath.Join(logFileDir, kStdioLogFile)
-		fmt.Printf("[Info] stdout && stderr will redirect to file [%s]\n", stdoutLogFilePath)
+
+		// 一旦创建了 DEAMON 进程最好就不要再打印到标准输出了，会显得控制台很乱
+		// fmt.Printf("[Info] stdout && stderr will redirect to file [%s]\n", stdoutLogFilePath)
 
 		RedirectStdoutAndStderr(stdoutLogFilePath)
 	}
