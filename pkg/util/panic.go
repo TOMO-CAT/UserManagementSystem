@@ -2,6 +2,7 @@ package util
 
 import (
 	"context"
+	"fmt"
 	"runtime"
 	"runtime/debug"
 	"strings"
@@ -26,6 +27,8 @@ func HandlePanic(ctx context.Context, tag string) {
 	}
 
 	if err := recover(); err != nil {
+		// 避免因为 logger 挂了导致无法打印堆栈信息
+		fmt.Printf("panic||trace=%v||err=%v||stack=%v||tag=%v\n", ctx.Value("trace_id"), err, string(debug.Stack()), tag)
 		logger.Error("panic||trace=%v||err=%v||stack=%v||tag=%v", ctx.Value("trace_id"), err, string(debug.Stack()), tag)
 	}
 }

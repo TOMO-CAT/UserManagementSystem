@@ -98,7 +98,7 @@ func (a *App) runFuncWrapper() cli.ActionFunc {
 			pidFileDir, _ = os.Getwd()
 		}
 
-		// 处理启停控制指令 (-c start | stop | restart )
+		// 处理启停控制指令 (-c start | stop | restart)
 		controlCmd := c.String("control")
 		if controlCmd != "" {
 			switch controlCmd {
@@ -142,6 +142,8 @@ func (a *App) runFuncWrapper() cli.ActionFunc {
 			defer func() {
 				defer a.wg.Done()
 				if err := recover(); err != nil {
+					// 避免因为 logger 挂了导致无法打印堆栈信息
+					fmt.Printf("panic with err [%v], stack:\n%s\n", err, string(debug.Stack()))
 					logger.Error("panic with err [%v], stack:\n%s", err, string(debug.Stack()))
 					a.errChan <- fmt.Errorf("panic with err [%v]", err)
 				}
@@ -177,7 +179,7 @@ func (a *App) wait(cancel context.CancelFunc) {
 		}
 	}
 
-	// 等待两秒以实现优雅退出, 如果还是不能退出则强制退出
+	// 等待两秒以实现优雅退出，如果还是不能退出则强制退出
 	cancel()
 	waitCtx, waitCancel := context.WithTimeout(context.Background(), time.Second*2)
 	defer waitCancel()
