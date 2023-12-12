@@ -17,6 +17,7 @@ const (
 )
 
 // InitLogger 根据配置文件初始化日志模块
+// TODO: 目前未 InitLogger 时默认是不打印日志的，修改成默认会打印到控制台
 func InitLogger(loggerConfPath string) (err error) {
 
 	if !isFileExist(loggerConfPath) {
@@ -62,6 +63,20 @@ func RedirectStdoutAndStderr(filePath string) (err error) {
 }
 
 func initLoggerWithConf(conf *config.LoggerConfig) (err error) {
+	// 优先注册 console writer, 防止注册 FileWriter panic 导致无法打印日志
+	// 控制台日志
+	if conf.GetConsoleWriterConfig().GetEnable() {
+		w := NewConsoleWriter()
+		w.SetColor(conf.ConsoleWriterConfig.GetEnableColor())
+		if consoleLogLevel, ok := string2logLevel[conf.ConsoleWriterConfig.GetLogLevel().String()]; !ok {
+			err = errors.New("invalid log level: " + conf.ConsoleWriterConfig.GetLogLevel().String())
+			return
+		} else {
+			w.SetLevel(consoleLogLevel)
+		}
+		Register(w)
+	}
+
 	if conf.GetFileWriterConfig().GetEnable() {
 		// INFO 日志
 		if len(conf.FileWriterConfig.GetInfoLogPath()) > 0 {
@@ -102,18 +117,6 @@ func initLoggerWithConf(conf *config.LoggerConfig) (err error) {
 		RedirectStdoutAndStderr(stdoutLogFilePath)
 	}
 
-	// 控制台日志
-	if conf.GetConsoleWriterConfig().GetEnable() {
-		w := NewConsoleWriter()
-		w.SetColor(conf.ConsoleWriterConfig.GetEnableColor())
-		if consoleLogLevel, ok := string2logLevel[conf.ConsoleWriterConfig.GetLogLevel().String()]; !ok {
-			err = errors.New("invalid log level: " + conf.ConsoleWriterConfig.GetLogLevel().String())
-			return
-		} else {
-			w.SetLevel(consoleLogLevel)
-		}
-		Register(w)
-	}
 
 	if fileLogLevel, ok := string2logLevel[conf.FileWriterConfig.GetLogLevel().String()]; !ok {
 		err = errors.New("invalid log level: " + conf.FileWriterConfig.GetLogLevel().String())

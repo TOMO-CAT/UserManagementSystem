@@ -22,6 +22,8 @@ type App struct {
 	PrepareFunc cli.BeforeFunc
 	RunFunc     func(map[string]interface{}, context.Context, chan error, *sync.WaitGroup) error
 
+	implement cli.App
+
 	// exit gracefully
 	wg      sync.WaitGroup
 	errChan chan error
@@ -55,7 +57,7 @@ func (a *App) StartService(customFlags ...cli.Flag) error {
 	flags := append(commonFlags, customFlags...)
 	sort.Sort(cli.FlagsByName(flags))
 
-	app := cli.App{
+	a.implement = cli.App{
 		Name:        a.Name,
 		Usage:       a.Usage,
 		Version:     fmt.Sprintf("%s - %s [%s]", Version, Commit, Branch),
@@ -71,7 +73,7 @@ func (a *App) StartService(customFlags ...cli.Flag) error {
 		Action: a.runFuncWrapper(),
 	}
 
-	if err := app.Run(os.Args); err != nil {
+	if err := a.implement.Run(os.Args); err != nil {
 		logger.Error("run service fail with err [%v]", err)
 		return err
 	}
@@ -134,10 +136,18 @@ func (a *App) runFuncWrapper() cli.ActionFunc {
 		// 运行主逻辑
 		a.wg.Add(1)
 		// 获取所有的 flag 透传出去给用户 run 方法
+
 		var flagMap = make(map[string]interface{})
-		for _, name := range c.FlagNames() {
-			flagMap[name] = c.Generic(name)
+		// 如果命令行没指定的话，这里 c.FlagNames () 拿不到任何 flags
+		// for _, name := range c.FlagNames() {
+		// 	flagMap[name] = c.Generic(name)
+		// }
+		// 换成 a.implement.Flags 获取参数
+		for _, cliFlag := range a.implement.Flags {
+			flagName := cliFlag.Names()[0]
+			flagMap[flagName] = c.Generic(flagName)
 		}
+
 		go func() {
 			defer func() {
 				defer a.wg.Done()
