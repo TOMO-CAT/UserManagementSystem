@@ -13,6 +13,11 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
     sudo \
     curl
 
+# CGO 环境
+RUN apt-get install -y --fix-missing \
+    build-essential \
+    clang
+
 # 设置代理, 解决 go install 的网络问题
 ENV GOPROXY=https://proxy.golang.com.cn,direct
 
