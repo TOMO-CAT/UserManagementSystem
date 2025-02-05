@@ -39,7 +39,7 @@ function help_info() {
   local bash_name=$(basename "${BASH_SOURCE[0]}")
   echo "Usage: bash docker.sh COMMAND [OPTIONS]"
   echo ""
-  echo "A script to build/run/delete docker container easyily"
+  echo "A script to build/run/delete docker container easily"
   echo ""
   echo "Commands:"
   echo "  run              Run container."
@@ -117,7 +117,6 @@ function docker_build() {
     -v ${PROJECT_BASE_DIR}:/${PROJECT_NAME} \
     -v ${HOME}/.gitconfig:${docker_home}/.gitconfig\
     -v ${HOME}/.ssh:${docker_home}/.ssh \
-    -v ${HOME}/.bypy:${docker_home}/.bypy \
     -v ${HOME}/.profile:${docker_home}/.profile \
     ${devices} \
     -w /${PROJECT_NAME}"
