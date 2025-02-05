@@ -11,6 +11,7 @@
     ],
     // cspell
     "cSpell.words": [
+        "aliyun",
         "Anson",
         "auths",
         "didi",
@@ -29,10 +30,12 @@
         "myhash",
         "mykey",
         "myset",
+        "NOPASSWD",
         "orlangure",
         "protoc",
         "protoimpl",
         "redigo",
+        "resolv",
         "SADD",
         "SETNX",
         "SMEMBERS",
